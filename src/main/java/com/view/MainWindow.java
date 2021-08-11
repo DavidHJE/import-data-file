@@ -31,9 +31,10 @@ public class MainWindow extends JFrame {
 	private JTextField FilePath;
 	private JCheckBox CheckBoxFirstRow;
 	
-	String Absolutepath;
+	String absolutepath;
 	static Boolean firstRowEqualsColumn = false;
 	static Integer nbColumn;
+	static String columnNames = "";
 	/**
 	 * Launch the application.
 	 */
@@ -77,10 +78,10 @@ public class MainWindow extends JFrame {
 				int result = fileChooser.showOpenDialog(null);
 				if (result == JFileChooser.APPROVE_OPTION) {
 				    File selectedFile = fileChooser.getSelectedFile();
-				    Absolutepath = selectedFile.getAbsolutePath();
+				    absolutepath = selectedFile.getAbsolutePath();
 				    String FileName = selectedFile.getName();
 				    FilePath.setText(FileName);
-				    Import(Absolutepath);
+				    Import(absolutepath);
 				}
 				
 			}
@@ -127,11 +128,14 @@ public class MainWindow extends JFrame {
 		        String[] columnName = allData.get(0);
 				nbColumn = columnName.length;
 				if(firstRowEqualsColumn) {
-		        	
+			        for (int j = 0; j < columnName.length; j++) {
+			        	columnNames += columnName[j] + ";";
+			        }
 		        }else {
-		        	
+		        	for (int k = 0; k < columnName.length; k++) {
+		        		columnNames += "colonne" + (k+1) +";";
+			        }
 		        }
-				
 		    } catch (IOException e) {
 		        e.printStackTrace();
 		    }
