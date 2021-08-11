@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.model.Database;
+import com.model.User;
 
 public class UserDao {
 
@@ -93,5 +94,30 @@ public class UserDao {
 			return true;
 		}
 
+	}
+	
+	public static User getUser(String username, char[] password) throws Exception {
+		Database db = Database.getInstance();
+		Connection connexion = db.getConnexion();
+
+		PreparedStatement pst = connexion.prepareStatement("SELECT * FROM public.\"Utilisateurs\" WHERE identifiant=?;");
+		pst.setString(1, username);
+		ResultSet resultSet = pst.executeQuery();
+
+		if (resultSet.next()) {
+			BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+			boolean isCorrectPassword = bCryptPasswordEncoder.matches(new String(password),
+					resultSet.getString("mot_de_passe"));
+
+			if (isCorrectPassword) {
+				User user = new User(resultSet.getInt("id"), resultSet.getString("identifiant"), resultSet.getString("email"));
+
+				return user;
+			} else {
+				return null;
+			}
+		} else {
+			return null;
+		}
 	}
 }

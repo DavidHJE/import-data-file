@@ -5,15 +5,19 @@ import java.util.Arrays;
 import javax.swing.JOptionPane;
 
 import com.dao.UserDao;
+import com.model.User;
+import com.view.ConnectionForm;
 import com.view.InscriptionForm;
 
 public class ConnectionController {
 	private InscriptionForm inscriptionFrame;
+	private ConnectionForm connectionFrame;
 
 	public ConnectionController() {
 		try {
-			inscriptionFrame = new InscriptionForm(this);
-			inscriptionFrame.setVisible(true);
+			connectionFrame = new ConnectionForm(this);
+			connectionFrame.setVisible(true);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -21,7 +25,20 @@ public class ConnectionController {
 
 	public void openConnectionFrame() {
 		try {
-			inscriptionFrame.setVisible(false);
+			connectionFrame = new ConnectionForm(this);
+			connectionFrame.setVisible(true);
+			inscriptionFrame.dispose();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public void openInscriptionFrame() {
+		try {
+			inscriptionFrame = new InscriptionForm(this);
+			inscriptionFrame.setVisible(true);
+			connectionFrame.dispose();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -86,10 +103,28 @@ public class ConnectionController {
 		try {
 			UserDao.create(username, email, passwordConfirm);
 
+			System.out.println("ok inscription");
+			inscriptionFrame.dispose();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+
+	public void connection(String username, char[] password) {
+		try {
+			User user = UserDao.getUser(username, password);
+			
+			if (user == null) {
+				JOptionPane.showMessageDialog(connectionFrame, "Nom d'utilisateur ou mot de passe incorrecte !",
+						"Erreur", JOptionPane.ERROR_MESSAGE);
+			} else {
+				System.out.println("ok connection");
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }
