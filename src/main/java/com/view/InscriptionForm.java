@@ -35,26 +35,6 @@ public class InscriptionForm extends JFrame {
 
 	private JButton btnConnexion;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					new ConnectionController();
-//					InscriptionForm frame = new InscriptionForm();
-//					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	public InscriptionForm(final ConnectionController connection) {
 		setResizable(false);
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
