@@ -33,6 +33,7 @@ public class MainWindow extends JFrame {
 	
 	String absolutepath;
 	static Boolean firstRowEqualsColumn = false;
+	static Boolean createTable = false;
 	static Integer nbColumn;
 	static String columnNames = "";
 	/**
@@ -67,7 +68,7 @@ public class MainWindow extends JFrame {
 		contentPane.add(FilePath);
 		FilePath.setColumns(10);
 		
-		JButton BtnImport = new JButton("New button");
+		JButton BtnImport = new JButton("Rechercher");
 		BtnImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//fileChooser
@@ -81,7 +82,6 @@ public class MainWindow extends JFrame {
 				    absolutepath = selectedFile.getAbsolutePath();
 				    String FileName = selectedFile.getName();
 				    FilePath.setText(FileName);
-				    Import(absolutepath);
 				}
 				
 			}
@@ -89,7 +89,7 @@ public class MainWindow extends JFrame {
 		BtnImport.setBounds(413, 10, 89, 23);
 		contentPane.add(BtnImport);
 		
-		CheckBoxFirstRow = new JCheckBox("New check box");
+		CheckBoxFirstRow = new JCheckBox("Fichier poss\u00E9dant ent\u00EAte");
 		CheckBoxFirstRow.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				
@@ -100,8 +100,37 @@ public class MainWindow extends JFrame {
 				}
 			}
 		});
-		CheckBoxFirstRow.setBounds(10, 38, 97, 23);
+		CheckBoxFirstRow.setBounds(10, 38, 377, 23);
 		contentPane.add(CheckBoxFirstRow);
+		
+		JCheckBox CheckBoxCreateTable = new JCheckBox("Cr\u00E9er une table depuis le fichier");
+		CheckBoxCreateTable.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					createTable = true;
+				}else {
+					createTable = false;
+				}
+			}
+		});
+		CheckBoxCreateTable.setBounds(10, 64, 377, 23);
+		contentPane.add(CheckBoxCreateTable);
+		
+		JButton BtnNext = new JButton("Suivant");
+		BtnNext.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Import(absolutepath);
+				if(createTable = true) {
+					TableCreationWindow TableCreationWindow = new TableCreationWindow(nbColumn,columnNames);
+					TableCreationWindow.setVisible(true);
+				}else {
+					
+				}
+				dispose();
+			}
+		});
+		BtnNext.setBounds(214, 113, 89, 23);
+		contentPane.add(BtnNext);
 	}
 	
 	
