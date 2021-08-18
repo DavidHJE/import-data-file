@@ -1,10 +1,13 @@
 package com.group4;
 
+import com.controller.ConnectionController;
+
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		System.out.println("Hello World branch dylan");
+
+		ConnectionController connection = new ConnectionController();
+
 	}
 
 }
