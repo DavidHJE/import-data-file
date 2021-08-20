@@ -25,6 +25,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
@@ -43,7 +44,7 @@ public class TableCreationWindow extends JFrame {
 	private JScrollPane scrollPane;
 	private JTextField TableNameField;
 	
-	static String absolutepath = "";
+	static String absolutepath;
 	static Integer nbColumn;
 	static String columnNames = "";
 	static Boolean firstRowEqualsColumn = false;
@@ -122,6 +123,7 @@ public class TableCreationWindow extends JFrame {
 		lblNewLabel.setBounds(186, 15, 81, 14);
 		contentPane.add(lblNewLabel);
 		
+		this.absolutepath = absolutepath ;
 		ShowTable(nbColumn,columnNames);
 		
 	}
@@ -157,6 +159,7 @@ public class TableCreationWindow extends JFrame {
 		String finalSQL = "CREATE TABLE IF NOT EXISTS ";
 		String type;
 		String primaryColumn = "";
+		List<String> tableColumnName = new ArrayList<String>();
 		
 		if(TableName.equals("")) {
 			JOptionPane.showMessageDialog(this, "ERREUR!\nVeuillez remplir correctement le nom de la table",
@@ -191,6 +194,7 @@ public class TableCreationWindow extends JFrame {
 					switch(j) {
 						case 1:
 							finalSQL += cellInfo + " "+ type;
+							tableColumnName.add(cellInfo);
 							break;
 						case 2:
 							if(cellInfo.equals("true")) {
@@ -246,10 +250,29 @@ public class TableCreationWindow extends JFrame {
 	            int dialogResult = JOptionPane.showConfirmDialog (null, "Voulez-vous importer les données du csv dans la nouvel table ?","",dialogButton);
 	            if(dialogResult == JOptionPane.YES_OPTION){
 	            	//on lance l'import de donées:
-	            	
+	            	ImportAfterCreate(absolutepath,firstRowEqualsColumn,tableColumnName);
 	            }	
 			}
 		}
 		
 	}
+	
+	public void ImportAfterCreate(String absolutepath, Boolean firstRowEqualsColumn, List<String> tableColumnName) {
+		try {
+			
+	        FileReader fileReader = new FileReader(absolutepath);
+	        CSVReader openCSVReader = new CSVReader(fileReader);	
+	        List<String[]> allData = openCSVReader.readAll();        
+	        
+	        for (String[] row : allData) {
+	            for (String col : row) {
+	                //System.out.print(col + "\t");
+	            }
+	            System.out.println();
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
 }
