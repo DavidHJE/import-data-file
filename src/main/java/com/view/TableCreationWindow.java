@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.controller.ConnectionController;
 import com.model.Database;
+import com.opencsv.CSVReader;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -17,10 +18,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.Vector;
@@ -38,9 +43,10 @@ public class TableCreationWindow extends JFrame {
 	private JScrollPane scrollPane;
 	private JTextField TableNameField;
 	
-	String absolutepath;
+	static String absolutepath = "";
 	static Integer nbColumn;
 	static String columnNames = "";
+	static Boolean firstRowEqualsColumn = false;
 	Database db;
 	
 	
@@ -51,7 +57,7 @@ public class TableCreationWindow extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					TableCreationWindow frame = new TableCreationWindow(nbColumn,columnNames);
+					TableCreationWindow frame = new TableCreationWindow(nbColumn,columnNames,firstRowEqualsColumn,absolutepath);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -65,7 +71,7 @@ public class TableCreationWindow extends JFrame {
 	 */
 	
 	
-	public TableCreationWindow (final Integer nbColumn, final String columnNames) {
+	public TableCreationWindow (final Integer nbColumn, final String columnNames, final Boolean firstRowEqualsColumn, final String absolutepath) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 900);
 		contentPane = new JPanel();
@@ -98,7 +104,7 @@ public class TableCreationWindow extends JFrame {
 		));
 		scrollPane.setViewportView(TableImportfields);
 		
-		JButton btnNewButton = new JButton("Test Lecture Table");
+		JButton btnNewButton = new JButton("Cr\u00E9er la table");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CreateTable(nbColumn,columnNames);
@@ -115,6 +121,15 @@ public class TableCreationWindow extends JFrame {
 		JLabel lblNewLabel = new JLabel("Nom de la table");
 		lblNewLabel.setBounds(186, 15, 81, 14);
 		contentPane.add(lblNewLabel);
+		
+		JButton btnNewButton_1 = new JButton("New button");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ImportAfterCreate(absolutepath,firstRowEqualsColumn);
+			}
+		});
+		btnNewButton_1.setBounds(196, 443, 89, 23);
+		contentPane.add(btnNewButton_1);
 		
 		ShowTable(nbColumn,columnNames);
 		
@@ -228,6 +243,7 @@ public class TableCreationWindow extends JFrame {
 	            		"Erreur", JOptionPane.INFORMATION_MESSAGE);
 	            
 	            finalSQL = "ALTER TABLE public."+TableName+" ALTER COLUMN "+primaryColumn+" ADD GENERATED ALWAYS AS IDENTITY (SEQUENCE NAME public."+TableName+"_"+primaryColumn+"_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1);";
+	            
 	            try {
 	            	st = connexion.createStatement();
 					st.executeQuery(finalSQL);
@@ -238,10 +254,47 @@ public class TableCreationWindow extends JFrame {
 	            int dialogButton = JOptionPane.YES_NO_OPTION;
 	            int dialogResult = JOptionPane.showConfirmDialog (null, "Voulez-vous importer les données du csv dans la nouvel table ?","",dialogButton);
 	            if(dialogResult == JOptionPane.YES_OPTION){
-
+	            	//on lance l'import de donées:
+	            	
 	            }	
 			}
 		}
 		
+	}
+	
+	public static void ImportAfterCreate(String absolutepath,Boolean firstRowEqualsColumn) {
+		
+//		try {
+//	        FileReader fileReader = new FileReader(absolutepath);
+//	        CSVReader openCSVReader = new CSVReader(fileReader);	
+//	        List<String[]> allData = openCSVReader.readAll();        
+//	        
+//	        //lire tout
+////	        for (String[] row : allData) {
+////	            for (String col : row) {
+////	                System.out.print(col + "\t");
+////	            }
+////	            System.out.println();
+////	        }
+//	        //lire 1 ligne
+////	        String[] columnName = allData.get(0);
+////	        for (int j = 0; j < columnName.length; j++) {
+////	        	System.out.print(columnName[j] + ";");
+////	        }
+//	        
+//	        String[] columnName = allData.get(0);
+//			nbColumn = columnName.length;
+//			if(firstRowEqualsColumn) {
+//		        for (int j = 0; j < columnName.length; j++) {
+//		        	columnNames += columnName[j] + ";";
+//		        }
+//	        }else {
+//	        	for (int k = 0; k < columnName.length; k++) {
+//	        		columnNames += "colonne" + (k+1) +";";
+//		        }
+//	        }
+//	    } catch (IOException e) {
+//	        e.printStackTrace();
+//	    }
 	}
 }

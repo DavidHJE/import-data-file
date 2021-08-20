@@ -120,7 +120,7 @@ public class MainWindow extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				Import(absolutepath);
 				if(createTable = true) {
-					TableCreationWindow TableCreationWindow = new TableCreationWindow(nbColumn,columnNames);
+					TableCreationWindow TableCreationWindow = new TableCreationWindow(nbColumn,columnNames,firstRowEqualsColumn,absolutepath);
 					TableCreationWindow.setVisible(true);
 				}else {
 					
