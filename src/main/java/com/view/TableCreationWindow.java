@@ -122,15 +122,6 @@ public class TableCreationWindow extends JFrame {
 		lblNewLabel.setBounds(186, 15, 81, 14);
 		contentPane.add(lblNewLabel);
 		
-		JButton btnNewButton_1 = new JButton("New button");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ImportAfterCreate(absolutepath,firstRowEqualsColumn);
-			}
-		});
-		btnNewButton_1.setBounds(196, 443, 89, 23);
-		contentPane.add(btnNewButton_1);
-		
 		ShowTable(nbColumn,columnNames);
 		
 	}
@@ -260,41 +251,5 @@ public class TableCreationWindow extends JFrame {
 			}
 		}
 		
-	}
-	
-	public static void ImportAfterCreate(String absolutepath,Boolean firstRowEqualsColumn) {
-		
-//		try {
-//	        FileReader fileReader = new FileReader(absolutepath);
-//	        CSVReader openCSVReader = new CSVReader(fileReader);	
-//	        List<String[]> allData = openCSVReader.readAll();        
-//	        
-//	        //lire tout
-////	        for (String[] row : allData) {
-////	            for (String col : row) {
-////	                System.out.print(col + "\t");
-////	            }
-////	            System.out.println();
-////	        }
-//	        //lire 1 ligne
-////	        String[] columnName = allData.get(0);
-////	        for (int j = 0; j < columnName.length; j++) {
-////	        	System.out.print(columnName[j] + ";");
-////	        }
-//	        
-//	        String[] columnName = allData.get(0);
-//			nbColumn = columnName.length;
-//			if(firstRowEqualsColumn) {
-//		        for (int j = 0; j < columnName.length; j++) {
-//		        	columnNames += columnName[j] + ";";
-//		        }
-//	        }else {
-//	        	for (int k = 0; k < columnName.length; k++) {
-//	        		columnNames += "colonne" + (k+1) +";";
-//		        }
-//	        }
-//	    } catch (IOException e) {
-//	        e.printStackTrace();
-//	    }
 	}
 }
