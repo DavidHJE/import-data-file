@@ -7,6 +7,7 @@ import java.awt.Cursor;
 import java.awt.EventQueue;
 
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -34,7 +35,7 @@ public class ConnectionForm extends JFrame {
 	private JPasswordField passwordField;
 	private JButton btnConnexion;
 
-	private JLabel connexionLink;
+	private JLabel resetPassword;
 
 	public ConnectionForm(final ConnectionController controller) {
 		setResizable(false);
@@ -70,12 +71,12 @@ public class ConnectionForm extends JFrame {
 		btnConnexion.setBounds(225, 270, 150, 40);
 		contentPane.add(btnConnexion);
 
-		connexionLink = new JLabel("Mot de passe oublié ?");
-		connexionLink.setHorizontalAlignment(SwingConstants.CENTER);
-		connexionLink.setForeground(Color.blue.darker());
-		connexionLink.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		connexionLink.setBounds(200, 320, 200, 30);
-		contentPane.add(connexionLink);
+		resetPassword = new JLabel("Mot de passe oublié ?");
+		resetPassword.setHorizontalAlignment(SwingConstants.CENTER);
+		resetPassword.setForeground(Color.blue.darker());
+		resetPassword.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		resetPassword.setBounds(200, 320, 200, 30);
+		contentPane.add(resetPassword);
 		
 		btnInscription.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -90,10 +91,12 @@ public class ConnectionForm extends JFrame {
 			}
 		});
 		
-		connexionLink.addMouseListener(new MouseAdapter() {
+		resetPassword.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
+				ResetPassword dialog = new ResetPassword();
+				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+				dialog.setVisible(true);
 			}
 		});
 		
