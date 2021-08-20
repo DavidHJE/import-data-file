@@ -26,7 +26,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
 
 public class MainWindow extends JFrame {
-
 	private JPanel contentPane;
 	private JTextField FilePath;
 	private JCheckBox CheckBoxFirstRow;

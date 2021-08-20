@@ -7,13 +7,22 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.controller.ConnectionController;
+import com.model.Database;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Objects;
+import java.util.Scanner;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
 import javax.swing.JTable;
@@ -32,7 +41,7 @@ public class TableCreationWindow extends JFrame {
 	String absolutepath;
 	static Integer nbColumn;
 	static String columnNames = "";
-	
+	Database db;
 	
 	
 	/**
@@ -138,14 +147,14 @@ public class TableCreationWindow extends JFrame {
 	public void CreateTable(Integer nbColumn, String columnNames) {
 		
 		String TableName = TableNameField.getText();
-		Integer start = 0;
 		Boolean continueCreation = true;
-		String finalSQL = "CREATE TABLE [IF NOT EXISTS] ";
+		String finalSQL = "CREATE TABLE IF NOT EXISTS ";
 		String type;
+		String primaryColumn = "";
+		
 		if(TableName.equals("")) {
-//			JOptionPane.showMessageDialog(Message, "ERREUR!\nVeuillez remplir correctement le nom de la table",
-//                    "Erreur", JOptionPane.ERROR_MESSAGE);
-			System.out.println("erreur nom table vide");
+			JOptionPane.showMessageDialog(this, "ERREUR!\nVeuillez remplir correctement le nom de la table",
+                    "Erreur", JOptionPane.ERROR_MESSAGE);
 		}
 		else {
 			finalSQL += TableName+" (";
@@ -153,6 +162,9 @@ public class TableCreationWindow extends JFrame {
 				for(int j = 1; j<((TableImportfields.getModel().getColumnCount())-1) ; j++) {
 					String cellInfo = TableImportfields.getValueAt(i,j).toString();
 					type = TableImportfields.getValueAt(i,5).toString();
+					if(cellInfo.equals("")) {
+						continueCreation = false;
+					}
 					switch(type) {//type
 					case"Nombre":
 						type = "INT ";
@@ -176,7 +188,8 @@ public class TableCreationWindow extends JFrame {
 							break;
 						case 2:
 							if(cellInfo.equals("true")) {
-								finalSQL += "serial PRIMARY KEY ";
+								finalSQL += "PRIMARY KEY ";
+								primaryColumn = TableImportfields.getValueAt(i,1).toString();
 							}
 							break;
 						case 3:
@@ -194,13 +207,39 @@ public class TableCreationWindow extends JFrame {
 							}
 							break;
 						default:
-							
 					}
 				}
 			}
+			finalSQL = finalSQL.substring(0, finalSQL.length()-1);
 			finalSQL += ");";
 			if(continueCreation == true) {
-				System.out.println(finalSQL);
+				db = db.getInstance();
+	            Connection connexion = db.getConnexion();
+	            Statement st;
+	            
+	            try {
+					st = connexion.createStatement();
+					st.executeQuery(finalSQL);
+					
+				} catch (SQLException e) {
+					
+				}
+	            JOptionPane.showMessageDialog(this, "Succès!\n la création de la table à réussi",
+	            		"Erreur", JOptionPane.INFORMATION_MESSAGE);
+	            
+	            finalSQL = "ALTER TABLE public."+TableName+" ALTER COLUMN "+primaryColumn+" ADD GENERATED ALWAYS AS IDENTITY (SEQUENCE NAME public."+TableName+"_"+primaryColumn+"_seq START WITH 1 INCREMENT BY 1 NO MINVALUE NO MAXVALUE CACHE 1);";
+	            try {
+	            	st = connexion.createStatement();
+					st.executeQuery(finalSQL);
+				} catch (SQLException e) {
+					
+				}
+
+	            int dialogButton = JOptionPane.YES_NO_OPTION;
+	            int dialogResult = JOptionPane.showConfirmDialog (null, "Voulez-vous importer les données du csv dans la nouvel table ?","",dialogButton);
+	            if(dialogResult == JOptionPane.YES_OPTION){
+
+	            }	
 			}
 		}
 		
